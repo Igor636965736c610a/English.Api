@@ -39,17 +39,17 @@ namespace English.Infrastructure.Services
             var validationCollectionName = _collectionRepository.GetCollection(collectionName);
             if (validationCollectionName is null)
             {
-                throw new InvalidOperationException();
+                throw new Exception("x");
             }
             var validationPolsihWord = _collectionRepository.GetWordPolish(polishWord, collectionName);
             if (validationPolsihWord is not null)
             {
-                throw new InvalidOperationException();
+                throw new Exception("y");
             }
             var validationEnglishWord = _collectionRepository.GetWordEnglish(englishWord, collectionName);
             if (validationEnglishWord is not null)
             {
-                throw new InvalidOperationException();
+                throw new Exception("z");
             }
             Guid id = Guid.NewGuid();
             var word = new Word(englishWord, polishWord, id);

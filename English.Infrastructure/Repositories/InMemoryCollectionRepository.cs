@@ -17,22 +17,22 @@ namespace English.Infrastructure.Repositories
         };
 
         public Task<Collection> GetCollection(Guid id)
-            => Task.FromResult(_name.SingleOrDefault(x => x.Id == id));
+            => Task.FromResult(_name.FirstOrDefault(x => x.Id == id));
 
         public Task<Collection> GetCollection(string name)
             => Task.FromResult(_name.FirstOrDefault(x => x.Name == name));
 
         public async Task<Word> GetWordById(Guid id, string collectionName)
         {
-            var wordCollection = await GetCollection(collectionName);
-            Word word = wordCollection.Word.SingleOrDefault(x => x.Id == id);
+            var _collectionName = await GetCollection(collectionName);
+            Word word = _collectionName.Word.FirstOrDefault(x => x.Id == id);
             return word;
         }
 
         public async Task<Word> GetWordEnglish(string englishWord, string collectionName)
         {
             var _collectionName = await GetCollection(collectionName);
-            Word word = _collectionName.Word.SingleOrDefault(x => x.EnglishWord == englishWord);
+            Word word = _collectionName.Word.FirstOrDefault(x => x.EnglishWord == englishWord);
             return word;
         }
 

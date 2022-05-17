@@ -41,12 +41,12 @@ namespace English.Infrastructure.Services
             {
                 throw new Exception("x");
             }
-            var validationPolsihWord = _collectionRepository.GetWordPolish(polishWord, collectionName);
+            var validationPolsihWord = await _collectionRepository.GetWordPolish(polishWord, collectionName);
             if (validationPolsihWord is not null)
             {
                 throw new Exception("y");
             }
-            var validationEnglishWord = _collectionRepository.GetWordEnglish(englishWord, collectionName);
+            var validationEnglishWord = await _collectionRepository.GetWordEnglish(englishWord, collectionName);
             if (validationEnglishWord is not null)
             {
                 throw new Exception("z");

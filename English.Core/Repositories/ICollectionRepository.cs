@@ -10,15 +10,14 @@ namespace English.Core.Repositories
 {
     public interface ICollectionRepository
     {
-        Collection GetCollection(Guid id);
-        Collection GetCollection(string name);
-        Word GetWordEnglish(Guid id, string collectionName);
-        Word GetWordEnglish(string englishWord, string collectionName);
-        Word GetWordPolish(Guid id, string collectionName);
-        Word GetWordPolish(string polishWord, string collectionName);
-        IEnumerable<Collection> GetAllCollection();
-        IEnumerable<Word> GetAllWords(string collectionName);
-        void AddCollection(Collection collection);
-        void AddWord(Word word, string collectionName);
+        Task<Collection> GetCollection(Guid id);
+        Task<Collection> GetCollection(string name);
+        Task<Word> GetWordById(Guid id, string collectionName);
+        Task<Word> GetWordEnglish(string englishWord, string collectionName);
+        Task<Word> GetWordPolish(string polishWord, string collectionName);
+        Task<IEnumerable<Collection>> GetAllCollection();
+        Task<IEnumerable<Word>> GetAllWords(string collectionName);
+        Task AddCollection(Collection collection);
+        Task AddWord(Word word, string collectionName);
     }
 }

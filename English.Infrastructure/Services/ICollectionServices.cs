@@ -10,13 +10,13 @@ namespace English.Infrastructure.Services
 {
     public interface ICollectionServices
     {
-        void AddCollection(string collectionName);
-        void AddWord(string polishWord, string englishWord, string collectionName);
-        CollectionDto GetCollection(Guid id);
-        CollectionDto GetCollection(string name);
-        WordDto GetWordEnglish(Guid id, string collectionName);
-        WordDto GetWordEnglish(string englishWord, string collectionName);
-        WordDto GetWordPolish(Guid id, string collectionName);
-        WordDto GetWordPolish(string polishWord, string collectionName);
+        Task AddCollection(string collectionName);
+        Task AddWord(string polishWord, string englishWord, string collectionName);
+        Task<CollectionDto> GetCollection(Guid id);
+        Task<CollectionDto> GetCollection(string name);
+        Task<WordDto> GetWordEnglish(Guid id, string collectionName);
+        Task<WordDto> GetWordEnglish(string englishWord, string collectionName);
+        Task<WordDto> GetWordPolish(Guid id, string collectionName);
+        Task<WordDto> GetWordPolish(string polishWord, string collectionName);
     }
 }

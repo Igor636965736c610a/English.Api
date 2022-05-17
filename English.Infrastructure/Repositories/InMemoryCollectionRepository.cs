@@ -16,55 +16,48 @@ namespace English.Infrastructure.Repositories
 
         };
 
-        public Collection GetCollection(Guid id)
-            => _name.SingleOrDefault(x => x.Id == id);
+        public Task<Collection> GetCollection(Guid id)
+            => Task.FromResult(_name.SingleOrDefault(x => x.Id == id));
 
-        public Collection GetCollection(string name)
-            => _name.SingleOrDefault(x => x.Name == name);
+        public Task<Collection> GetCollection(string name)
+            => Task.FromResult(_name.FirstOrDefault(x => x.Name == name));
 
-        public Word GetWordEnglish(Guid id, string collectionName)
+        public async Task<Word> GetWordById(Guid id, string collectionName)
         {
-            var word = GetCollection(collectionName);
-            var _englishWord = word.Word.SingleOrDefault(x => x.Id == id);
-            return _englishWord;
+            var wordCollection = await GetCollection(collectionName);
+            Word word = wordCollection.Word.SingleOrDefault(x => x.Id == id);
+            return word;
         }
 
-        public Word GetWordEnglish(string englishWord, string collectionName)
+        public async Task<Word> GetWordEnglish(string englishWord, string collectionName)
         {
-            var word = GetCollection(collectionName);
-            var _englishWord = word.Word.SingleOrDefault(x => x.EnglishWord == englishWord);
-            return _englishWord;
+            var _collectionName = await GetCollection(collectionName);
+            Word word = _collectionName.Word.SingleOrDefault(x => x.EnglishWord == englishWord);
+            return word;
         }
 
-        public Word GetWordPolish(string polishWord, string collectionName)
+        public async Task<Word> GetWordPolish(string polishWord, string collectionName)
         {
-            var word = GetCollection(collectionName);
-            var _polishWord = word.Word.SingleOrDefault(x => x.PolishWord == polishWord);
-            return _polishWord;
+            var wordCollection = await GetCollection(collectionName);
+            Word word = wordCollection.Word.SingleOrDefault(x => x.PolishWord == polishWord);
+            return word;
         }
 
-        public Word GetWordPolish(Guid id, string collectionName)
-        {
-            var word = GetCollection(collectionName);
-            var _polishWord = word.Word.SingleOrDefault(x => x.Id == id);
-            return _polishWord;
-        }
+        public Task AddCollection(Collection collection)
+            => Task.FromResult(_name.Add(collection));
 
-        public void AddCollection(Collection collection)
-            => _name.Add(collection);
-
-        public void AddWord(Word word, string collectionName)
+        public async Task AddWord(Word word, string collectionName)
         {
-            var _collectionName = GetCollection(collectionName);
+            var _collectionName = await GetCollection(collectionName);
             _collectionName.Word.Add(word);
         }
 
-        public IEnumerable<Word> GetAllWords(string collectioName)
+        public async Task<IEnumerable<Word>> GetAllWords(string collectioName)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Collection> GetAllCollection()
+        public async Task<IEnumerable<Collection>> GetAllCollection()
         {
             throw new NotImplementedException();
         }

@@ -21,9 +21,9 @@ namespace English.Infrastructure.Services
             _collectionRepository = collectionRepository;
             _mapper = mapper;
         }
-        public void AddCollection(string collectionName)
+        public async Task AddCollection(string collectionName)
         {
-            var validation = _collectionRepository.GetCollection(collectionName);
+            var validation = await _collectionRepository.GetCollection(collectionName);
             if (validation is not null)
             {
                 throw new InvalidOperationException();
@@ -31,12 +31,12 @@ namespace English.Infrastructure.Services
             var id = Guid.NewGuid();
             ISet<Word> isetWord = new HashSet<Word>();
             var collection = new Collection(collectionName, isetWord, id);
-            _collectionRepository.AddCollection(collection);
+            await _collectionRepository.AddCollection(collection);
         }
 
-        public void AddWord(string polishWord, string englishWord, string collectionName)
+        public async Task AddWord(string polishWord, string englishWord, string collectionName)
         {
-            var validationCollectionName = _collectionRepository.GetCollection(collectionName);
+            var validationCollectionName = await _collectionRepository.GetCollection(collectionName);
             if (validationCollectionName is null)
             {
                 throw new Exception("x");
@@ -53,17 +53,17 @@ namespace English.Infrastructure.Services
             }
             Guid id = Guid.NewGuid();
             var word = new Word(englishWord, polishWord, id);
-            _collectionRepository.AddWord(word, collectionName);
+            await _collectionRepository.AddWord(word, collectionName);
         }
 
-        public CollectionDto GetCollection(Guid id)
+        public Task<CollectionDto> GetCollection(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public CollectionDto GetCollection(string name)
+        public async Task<CollectionDto> GetCollection(string name)
         {
-            var collection = _collectionRepository.GetCollection(name);
+            var collection = await _collectionRepository.GetCollection(name);
             if (collection is null)
             {
                 throw new Exception("null");
@@ -72,14 +72,14 @@ namespace English.Infrastructure.Services
             return _mapper.Map<Collection, CollectionDto>(collection);
         }
 
-        public WordDto GetWordEnglish(Guid id, string collectionName)
+        public Task<WordDto> GetWordEnglish(Guid id, string collectionName)
         {
             throw new NotImplementedException();
         }
 
-        public WordDto GetWordEnglish(string englishWord, string collectionName)
+        public async Task<WordDto> GetWordEnglish(string englishWord, string collectionName)
         {
-            var word = _collectionRepository.GetWordEnglish(englishWord, collectionName);
+            var word = await _collectionRepository.GetWordEnglish(englishWord, collectionName);
             if (word is null)
             {
                 throw new Exception("null");
@@ -88,14 +88,14 @@ namespace English.Infrastructure.Services
             return _mapper.Map<Word, WordDto>(word);
         }
 
-        public WordDto GetWordPolish(Guid id, string collectionName)
+        public Task<WordDto> GetWordPolish(Guid id, string collectionName)
         {
             throw new NotImplementedException();
         }
 
-        public WordDto GetWordPolish(string polishWord, string collectionName)
+        public async Task<WordDto> GetWordPolish(string polishWord, string collectionName)
         {
-            var word = _collectionRepository.GetWordEnglish(polishWord, collectionName);
+            var word = await _collectionRepository.GetWordEnglish(polishWord, collectionName);
             if (word is null)
             {
                 throw new Exception("null");

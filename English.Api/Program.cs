@@ -1,8 +1,10 @@
 using English.Core.Repositories;
 using English.Infrastructure;
 using English.Infrastructure.AutoMapper;
+using English.Infrastructure.MyContext;
 using English.Infrastructure.Repositories;
 using English.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton(AutoMapperConfig.Initialize());
 builder.Services.AddScoped<ICollectionRepository, InMemoryCollectionRepository>();
 builder.Services.AddScoped<ICollectionServices, CollectionServices>();
+builder.Services.AddDbContext<EnglishAppContext>(options => 
+        options.UseSqlServer(builder.Configuration.GetConnectionString("MyEnglishApiCS")));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

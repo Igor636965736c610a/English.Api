@@ -16,10 +16,14 @@ namespace English.Infrastructure.MyContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Word>()
+            modelBuilder.Entity<Word>().ToTable("Words")
                 .HasOne(p => p.Collection)
                 .WithMany(b => b.Word)
                 .HasForeignKey(p => p.CollectionId);
+        }
+        
+        public EnglishAppContext(DbContextOptions options) : base(options)
+        {
         }
     }
 }

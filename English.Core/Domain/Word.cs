@@ -13,7 +13,7 @@ namespace English.Core.Entities
         public string PolishWord { get; set; }
         public Guid Id { get; protected set; }
 
-        public int CollectionId { get; set; }
+        public Guid CollectionId { get; set; }
         public Collection Collection { get; set; }
 
 

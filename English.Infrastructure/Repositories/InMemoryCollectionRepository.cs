@@ -33,19 +33,28 @@ namespace English.Infrastructure.Repositories
         public async Task<Word> GetWordById(Guid id, string collectionName)
         {
             var collection = await GetCollection(collectionName);
-            return collection.Word.FirstOrDefault(x => x.Id == id);
+            List<Word> words = new List<Word>();
+            var xd = await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection);
+            words.Add(xd);
+            return words.FirstOrDefault(y => y.Id == id);
         }
 
         public async Task<Word> GetWordEnglish(string englishWord, string collectionName)
         {
             var collection = await GetCollection(collectionName);
-            return collection.Word.FirstOrDefault(x => x.EnglishWord == englishWord);
+            List<Word> words = new List<Word>();
+            var xd = await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection);
+            words.Add(xd);
+            return words.FirstOrDefault(y => y.EnglishWord == englishWord);
         }
 
         public async Task<Word> GetWordPolish(string polishWord, string collectionName)
         {
             var collection = await GetCollection(collectionName);
-            return collection.Word.FirstOrDefault(x => x.PolishWord == polishWord);
+            List<Word> words = new List<Word>();
+            var xd = await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection);
+            words.Add(xd);
+            return words.FirstOrDefault(y => y.PolishWord == polishWord);
         }
 
         public async Task AddCollection(Collection collection)
@@ -57,7 +66,8 @@ namespace English.Infrastructure.Repositories
         public async Task AddWord(Word word, string collectionName)
         {
             var collection = await GetCollection(collectionName);
-            collection.Word.Add(word);
+            await _context.Words.AddAsync(word);
+            word.Collection = collection;
             await _context.SaveChangesAsync();
         }
 

@@ -5,7 +5,7 @@ namespace English.Core.Domain
     public class Collection
     {
         public string Name { get; protected set; }
-        public List<Word> Word { get; protected set; }
+        public List<Word> Word { get; protected set; } = new List<Word>();
         public Guid Id { get; protected set; }
 
         protected Collection()

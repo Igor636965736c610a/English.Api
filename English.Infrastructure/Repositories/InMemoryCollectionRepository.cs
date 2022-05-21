@@ -1,4 +1,5 @@
-﻿using English.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using English.Core.Domain;
 using English.Core.Entities;
 using English.Core.Repositories;
 using English.Infrastructure.MyContext;
@@ -18,17 +19,16 @@ namespace English.Infrastructure.Repositories
             _context = context;
         }
 
-
         private static ISet<Collection> _name = new HashSet<Collection>
         {
 
         };
 
-        public Task<Collection> GetCollection(Guid id)
-            => Task.FromResult(_context.Collections.FirstOrDefault(x => x.Id == id));
+        public async Task<Collection> GetCollection(Guid id)
+            => await _context.Collections.FirstOrDefaultAsync(x => x.Id == id);
 
-        public Task<Collection> GetCollection(string name)
-            => Task.FromResult(_context.Collections.FirstOrDefault(x => x.Name == name));
+        public async Task<Collection> GetCollection(string name)
+            => await _context.Collections.FirstOrDefaultAsync(x => x.Name == name);
 
         public async Task<Word> GetWordById(Guid id, string collectionName)
         {
@@ -48,13 +48,17 @@ namespace English.Infrastructure.Repositories
             return collection.Word.FirstOrDefault(x => x.PolishWord == polishWord);
         }
 
-        public Task AddCollection(Collection collection)
-            => Task.FromResult(_context.Collections.Add(collection));
+        public async Task AddCollection(Collection collection)
+        {
+            await _context.Collections.AddAsync(collection);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task AddWord(Word word, string collectionName)
         {
             var collection = await GetCollection(collectionName);
             collection.Word.Add(word);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Word>> GetAllWords(string collectioName)

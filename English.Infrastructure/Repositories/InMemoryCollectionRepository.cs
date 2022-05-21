@@ -33,28 +33,19 @@ namespace English.Infrastructure.Repositories
         public async Task<Word> GetWordById(Guid id, string collectionName)
         {
             var collection = await GetCollection(collectionName);
-            List<Word> words = new List<Word>();
-            var xd = await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection);
-            words.Add(xd);
-            return words.FirstOrDefault(y => y.Id == id);
+            return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.Id == id);
         }
 
         public async Task<Word> GetWordEnglish(string englishWord, string collectionName)
         {
             var collection = await GetCollection(collectionName);
-            List<Word> words = new List<Word>();
-            var xd = await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection);
-            words.Add(xd);
-            return words.FirstOrDefault(y => y.EnglishWord == englishWord);
+            return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.EnglishWord == englishWord);
         }
 
         public async Task<Word> GetWordPolish(string polishWord, string collectionName)
         {
             var collection = await GetCollection(collectionName);
-            List<Word> words = new List<Word>();
-            var xd = await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection);
-            words.Add(xd);
-            return words.FirstOrDefault(y => y.PolishWord == polishWord);
+            return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.PolishWord == polishWord);
         }
 
         public async Task AddCollection(Collection collection)

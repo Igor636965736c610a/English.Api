@@ -10,7 +10,7 @@ namespace English.Infrastructure.DTO
     public class CollectionDto
     {
         public string Name { get; set; }
-        public ISet<WordDto> Word { get; set; }
+        public List<WordDto> Word { get; set; }
         public Guid Id { get; set; }
     }
 }

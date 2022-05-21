@@ -29,8 +29,8 @@ namespace English.Infrastructure.Services
                 throw new InvalidOperationException();
             }
             var id = Guid.NewGuid();
-            ISet<Word> isetWord = new HashSet<Word>();
-            var collection = new Collection(collectionName, isetWord, id);
+            List<Word> listWord = new List<Word>();
+            var collection = new Collection(collectionName, listWord, id);
             await _collectionRepository.AddCollection(collection);
         }
 

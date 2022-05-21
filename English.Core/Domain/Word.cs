@@ -1,4 +1,5 @@
-﻿using System;
+﻿using English.Core.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,9 @@ namespace English.Core.Entities
         public string EnglishWord { get; set; }
         public string PolishWord { get; set; }
         public Guid Id { get; protected set; }
+
+        public int CollectionId { get; set; }
+        public Collection Collection { get; set; }
 
 
         protected Word()

@@ -25,22 +25,19 @@ namespace English.Infrastructure.Repositories
         public async Task<Word> GetWordById(Guid id, string collectionName)
         {
             var _collectionName = await GetCollection(collectionName);
-            Word word = _collectionName.Word.FirstOrDefault(x => x.Id == id);
-            return word;
+            return _collectionName.Word.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<Word> GetWordEnglish(string englishWord, string collectionName)
         {
             var _collectionName = await GetCollection(collectionName);
-            Word word = _collectionName.Word.FirstOrDefault(x => x.EnglishWord == englishWord);
-            return word;
+            return _collectionName.Word.FirstOrDefault(x => x.EnglishWord == englishWord);
         }
 
         public async Task<Word> GetWordPolish(string polishWord, string collectionName)
         {
             var wordCollection = await GetCollection(collectionName);
-            Word word = wordCollection.Word.SingleOrDefault(x => x.PolishWord == polishWord);
-            return word;
+            return wordCollection.Word.FirstOrDefault(x => x.PolishWord == polishWord);
         }
 
         public Task AddCollection(Collection collection)

@@ -8,6 +8,9 @@ namespace English.Core.Domain
         public List<Word> Word { get; protected set; } = new List<Word>();
         public Guid Id { get; protected set; }
 
+        public Guid UserId { get; set; }
+        public User User { get; set; }
+
         protected Collection()
         {
         }

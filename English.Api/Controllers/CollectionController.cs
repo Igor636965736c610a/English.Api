@@ -1,4 +1,5 @@
 ﻿using English.Core.Dto;
+using English.Infrastructure.Commands;
 using English.Infrastructure.Commands.Collection;
 using English.Infrastructure.Commands.Word;
 using English.Infrastructure.DTO;
@@ -16,16 +17,13 @@ namespace English.Api.Controllers
             _collectionServices = collectionServices;
         }
 
-
         [HttpPost("createCollection")]
         public async Task Post([FromBody] CreateCollection request)
             => await _collectionServices.AddCollection(request.CollectionName);
 
-
         [HttpPost("createWord")]
         public async Task Post([FromBody] CreateCollection collectionRequest, CreateWord wordRequest)
             => await _collectionServices.AddWord(wordRequest.PolishWord, wordRequest.EnglishWord, collectionRequest.CollectionName);
-
 
         [HttpGet("collectionName")]
         public async Task<CollectionDto> GetCollection(string collectionName)

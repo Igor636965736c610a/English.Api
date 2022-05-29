@@ -14,15 +14,10 @@ namespace English.Infrastructure.Repositories
     public class InMemoryCollectionRepository : ICollectionRepository
     {
         private readonly EnglishAppContext _context;
-        public InMemoryCollectionRepository(EnglishAppContext context)
+        protected InMemoryCollectionRepository(EnglishAppContext context)
         {
             _context = context;
         }
-
-        private static ISet<Collection> _name = new HashSet<Collection>
-        {
-
-        };
 
         public async Task<Collection> GetCollection(Guid id)
             => await _context.Collections.FirstOrDefaultAsync(x => x.Id == id);

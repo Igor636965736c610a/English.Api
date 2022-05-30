@@ -25,5 +25,11 @@ namespace English.Core.Domain
             Word = word;
             Id = id;
         }
+        public Collection(string name, List<Word> word, Guid id, User user)
+        {
+            Name = name;
+            Word = word;
+            Id = id;
+        }
     }
 }

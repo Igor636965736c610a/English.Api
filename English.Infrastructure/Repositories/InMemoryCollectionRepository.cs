@@ -19,45 +19,53 @@ namespace English.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Collection> GetCollection(Guid id)
-            => await _context.Collections.FirstOrDefaultAsync(x => x.Id == id);
-
-        public async Task<Collection> GetCollection(string name)
-            => await _context.Collections.FirstOrDefaultAsync(x => x.Name == name);
-
-        public async Task<Word> GetWordById(Guid id, string collectionName)
+        public async Task<Collection> GetCollection(Guid id, Guid userId)
         {
-            var collection = await GetCollection(collectionName);
+            var user = await _context.Users.FirstOrDefaultAsync(y => y.Id == userId);
+            return await _context.Collections.FirstOrDefaultAsync(x => x.Id == id && x.User == user);
+        }
+
+        public async Task<Collection> GetCollection(string name, Guid userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(y => y.Id == userId);
+            return await _context.Collections.FirstOrDefaultAsync(x => x.Name == name && x.User == user);
+        }
+
+        public async Task<Word> GetWordById(Guid id, string collectionName, Guid userId)
+        {
+            var collection = await GetCollection(collectionName, userId);
             return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.Id == id);
         }
 
-        public async Task<Word> GetWordEnglish(string englishWord, string collectionName)
+        public async Task<Word> GetWordEnglish(string englishWord, string collectionName, Guid userId)
         {
-            var collection = await GetCollection(collectionName);
+            var collection = await GetCollection(collectionName, userId);
             return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.EnglishWord == englishWord);
         }
 
-        public async Task<Word> GetWordPolish(string polishWord, string collectionName)
+        public async Task<Word> GetWordPolish(string polishWord, string collectionName, Guid userId)
         {
-            var collection = await GetCollection(collectionName);
+            var collection = await GetCollection(collectionName, userId);
             return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.PolishWord == polishWord);
         }
 
-        public async Task AddCollection(Collection collection)
+        public async Task AddCollection(Collection collection, Guid userId)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             await _context.Collections.AddAsync(collection);
+            collection.User = user;
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddWord(Word word, string collectionName)
+        public async Task AddWord(Word word, string collectionName, Guid userId)
         {
-            var collection = await GetCollection(collectionName);
+            var collection = await GetCollection(collectionName, userId);
             await _context.Words.AddAsync(word);
             word.Collection = collection;
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Word>> GetAllWords(string collectioName)
+        public async Task<IEnumerable<Word>> GetAllWords(string collectioName, Guid userId)
         {
             throw new NotImplementedException();
         }

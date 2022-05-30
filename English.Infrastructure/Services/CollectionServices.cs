@@ -16,44 +16,56 @@ namespace English.Infrastructure.Services
     {
         private readonly IMapper _mapper;
         private readonly ICollectionRepository _collectionRepository;
-        public CollectionServices(IMapper mapper, ICollectionRepository collectionRepository)
+        private readonly IUserRepository _userRepository;
+        public CollectionServices(IMapper mapper, ICollectionRepository collectionRepository, IUserRepository userRepository)
         {
             _collectionRepository = collectionRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
-        public async Task AddCollection(string collectionName)
+        public async Task AddCollection(string collectionName, Guid userId)
         {
-            var validation = await _collectionRepository.GetCollection(collectionName);
-            if (validation is not null)
+            var userValidation = await _userRepository.GetUserById(userId);
+            if (userValidation is not null)
+            {
+                throw new InvalidOperationException();
+            }
+            var nameValidation = await _collectionRepository.GetCollection(collectionName, userId);
+            if (nameValidation is not null)
             {
                 throw new InvalidOperationException();
             }
             var id = Guid.NewGuid();
             List<Word> listWord = new List<Word>();
             var collection = new Collection(collectionName, listWord, id);
-            await _collectionRepository.AddCollection(collection);
+            await _collectionRepository.AddCollection(collection, userId);
         }
 
-        public async Task AddWord(string polishWord, string englishWord, string collectionName)
+        public async Task AddWord(string polishWord, string englishWord, string collectionName, Guid userId)
         {
-            var validationCollectionName = await _collectionRepository.GetCollection(collectionName);
+            var validationUserId = await _userRepository.GetUserById(userId);
+            if(validationUserId is null)
+            {
+                throw new Exception("xd");
+            }
+            var validationCollectionName = await _collectionRepository.GetCollection(collectionName, userId);
             if (validationCollectionName is null)
             {
                 throw new Exception("x");
             }
-            var validationPolsihWord = await _collectionRepository.GetWordPolish(polishWord, collectionName);
+            var validationPolsihWord = await _collectionRepository.GetWordPolish(polishWord, collectionName, userId);
             if (validationPolsihWord is not null)
             {
                 throw new Exception("y");
             }
-            var validationEnglishWord = await _collectionRepository.GetWordEnglish(englishWord, collectionName);
+            var validationEnglishWord = await _collectionRepository.GetWordEnglish(englishWord, collectionName, userId);
             if (validationEnglishWord is not null)
             {
                 throw new Exception("z");
             }
             Guid id = Guid.NewGuid();
             var word = new Word(englishWord, polishWord, id);
-            await _collectionRepository.AddWord(word, collectionName);
+            await _collectionRepository.AddWord(word, collectionName, userId);
         }
 
         public Task<CollectionDto> GetCollection(Guid id)
@@ -61,9 +73,14 @@ namespace English.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task<CollectionDto> GetCollection(string name)
+        public async Task<CollectionDto> GetCollection(string name, Guid userId)
         {
-            var collection = await _collectionRepository.GetCollection(name);
+            var validationUserId = await _userRepository.GetUserById(userId);
+            if(validationUserId is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(name, userId);
             if (collection is null)
             {
                 throw new Exception("null");
@@ -77,9 +94,14 @@ namespace English.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task<WordDto> GetWordEnglish(string englishWord, string collectionName)
+        public async Task<WordDto> GetWordEnglish(string englishWord, string collectionName, Guid userId)
         {
-            var word = await _collectionRepository.GetWordEnglish(englishWord, collectionName);
+            var validationUserId = await _userRepository.GetUserById(userId);
+            if (validationUserId is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordEnglish(englishWord, collectionName, userId);
             if (word is null)
             {
                 throw new Exception("null");
@@ -93,9 +115,14 @@ namespace English.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task<WordDto> GetWordPolish(string polishWord, string collectionName)
+        public async Task<WordDto> GetWordPolish(string polishWord, string collectionName, Guid userId)
         {
-            var word = await _collectionRepository.GetWordEnglish(polishWord, collectionName);
+            var validationUserId = await _userRepository.GetUserById(userId);
+            if (validationUserId is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordEnglish(polishWord, collectionName, userId);
             if (word is null)
             {
                 throw new Exception("null");

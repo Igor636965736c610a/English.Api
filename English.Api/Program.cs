@@ -16,6 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton(AutoMapperConfig.Initialize());
 builder.Services.AddScoped<ICollectionRepository, InMemoryCollectionRepository>();
 builder.Services.AddScoped<ICollectionServices, CollectionServices>();
+builder.Services.AddScoped<IUserRepository, InMemoryUserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddDbContext<EnglishAppContext>(options => 
         options.UseSqlServer(builder.Configuration.GetConnectionString("MyEnglishApiCS")));

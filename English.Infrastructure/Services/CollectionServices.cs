@@ -26,7 +26,7 @@ namespace English.Infrastructure.Services
         public async Task AddCollection(string collectionName, Guid userId)
         {
             var userValidation = await _userRepository.GetUserById(userId);
-            if (userValidation is not null)
+            if (userValidation is null)
             {
                 throw new InvalidOperationException();
             }

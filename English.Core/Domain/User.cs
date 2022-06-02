@@ -20,6 +20,13 @@ namespace English.Core.Entities
         {
 
         }
+        public User(string name, string username, string email, Guid id)
+        {
+            Name = name;
+            UserName = username;
+            Email = email;
+            Id = id;
+        }
         public User(string name, string username, string password, string email, Guid id)
         {
             Name = name;

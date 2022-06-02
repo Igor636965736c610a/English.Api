@@ -32,9 +32,41 @@ namespace English.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Collections");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Collections", (string)null);
+                });
+
+            modelBuilder.Entity("English.Core.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("English.Core.Entities.Word", b =>
@@ -61,6 +93,17 @@ namespace English.Infrastructure.Migrations
                     b.ToTable("Words", (string)null);
                 });
 
+            modelBuilder.Entity("English.Core.Domain.Collection", b =>
+                {
+                    b.HasOne("English.Core.Entities.User", "User")
+                        .WithMany("Collection")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("English.Core.Entities.Word", b =>
                 {
                     b.HasOne("English.Core.Domain.Collection", "Collection")
@@ -75,6 +118,11 @@ namespace English.Infrastructure.Migrations
             modelBuilder.Entity("English.Core.Domain.Collection", b =>
                 {
                     b.Navigation("Word");
+                });
+
+            modelBuilder.Entity("English.Core.Entities.User", b =>
+                {
+                    b.Navigation("Collection");
                 });
 #pragma warning restore 612, 618
         }

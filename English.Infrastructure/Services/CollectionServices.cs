@@ -77,7 +77,7 @@ namespace English.Infrastructure.Services
         {
             var validationUserId = await _userRepository.GetUserById(userId);
             if(validationUserId is null)
-            {
+            { 
                 throw new Exception("null");
             }
             var collection = await _collectionRepository.GetCollection(name, userId);

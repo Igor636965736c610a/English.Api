@@ -14,7 +14,7 @@ namespace English.Infrastructure.Repositories
     public class InMemoryCollectionRepository : ICollectionRepository
     {
         private readonly EnglishAppContext _context;
-        protected InMemoryCollectionRepository(EnglishAppContext context)
+        public InMemoryCollectionRepository(EnglishAppContext context)
         {
             _context = context;
         }

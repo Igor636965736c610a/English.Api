@@ -18,6 +18,7 @@ namespace English.Infrastructure.AutoMapper
             {
                 cfg.CreateMap<Word, WordDto>();
                 cfg.CreateMap<Collection, CollectionDto>();
+                cfg.CreateMap<Word, LoginDto>();
             })
             .CreateMapper();
     }

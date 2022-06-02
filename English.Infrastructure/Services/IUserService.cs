@@ -1,4 +1,5 @@
-﻿using English.Infrastructure.DTO;
+﻿using English.Infrastructure.Commands.Login;
+using English.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace English.Infrastructure.Services
         Task<UserDto> GetUser(string username);
         Task<UserDto> GetUserByEmail(string email);
         Task<UserDto> GetUserById(Guid id);
+        Task<string> GenerateJwt(string email, string password);
     }
 }

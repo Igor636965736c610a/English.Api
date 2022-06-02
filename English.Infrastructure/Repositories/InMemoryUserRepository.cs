@@ -13,7 +13,7 @@ namespace English.Infrastructure.Repositories
     public class InMemoryUserRepository : IUserRepository
     {
         private readonly EnglishAppContext _context;
-        protected InMemoryUserRepository(EnglishAppContext context)
+        public InMemoryUserRepository(EnglishAppContext context)
         {
             _context = context;
         }
@@ -32,6 +32,8 @@ namespace English.Infrastructure.Repositories
 
         public async Task<User> GetUserById(Guid id)
             => await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<User> GetUserByPassword(string password)
+            => await _context.Users.FirstOrDefaultAsync(x => x.Password == password);
 
         public Task<IEnumerable<User>> GetAllUsers()
         {

@@ -5,12 +5,15 @@ using English.Infrastructure.Commands.User;
 using English.Infrastructure.Commands.Word;
 using English.Infrastructure.DTO;
 using English.Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace English.Api.Controllers
 {
+    [Authorize]
     [Route("controller")]
-    public class CollectionController
+    public class CollectionController : ControllerBase
     {
         private readonly ICollectionServices _collectionServices;
         public CollectionController(ICollectionServices collectionServices)
@@ -20,7 +23,11 @@ namespace English.Api.Controllers
 
         [HttpPost("createCollection")]
         public async Task Post([FromBody] CreateCollection CollectionRequest, CreateUser userRequest)
-            => await _collectionServices.AddCollection(CollectionRequest.CollectionName, userRequest.Id);
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var id = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.AddCollection(CollectionRequest.CollectionName, id);
+        }
 
         [HttpPost("createWord")]
         public async Task Post([FromBody] CreateCollection collectionRequest, CreateWord wordRequest, CreateUser userRequest)

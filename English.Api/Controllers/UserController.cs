@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace English.Api.Controllers
 {
     [Route("EnglishApi/account")]
-    public class UserController
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         public UserController(IUserService userService)
@@ -19,10 +19,10 @@ namespace English.Api.Controllers
             => await _userService.CreateUser(request.Name, request.UserName, request.Password, request.Email);
         
         [HttpPost("login")]
-        public async Task<string> Login([FromBody] Login request)
+        public async Task<IActionResult> Login([FromBody] Login request)
         {
-            string token = await _userService.GenerateJwt(request.Email, request.Password);
-            return token;
+            var token = await _userService.GenerateJwt(request.Email, request.Password);
+            return Ok(token);
         }
     }
 }

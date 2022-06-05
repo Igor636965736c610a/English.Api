@@ -14,7 +14,7 @@ namespace English.Core.Repositories
         Task<User> GetUserByUsername(string username);
         Task<User> GetUserByEmail(string email);
         Task<User> GetUserById(Guid id);
-        Task<User> GetUserByPassword(string password);
+        Task<User> GetUserByName(string name);
         Task<IEnumerable<User>> GetAllUsers();
         Task RemoveUser(Guid id);
         Task RemoveUser(string username);      

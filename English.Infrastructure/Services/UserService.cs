@@ -53,7 +53,7 @@ namespace English.Infrastructure.Services
             await _userRepository.CreateUser(user);
         }
 
-        public async Task<UserDto> GetUser(string username)
+        public async Task<UserDto> GetUserByUsername(string username)
         {
             var user = await _userRepository.GetUserByUsername(username);
             if(user is null)
@@ -63,19 +63,9 @@ namespace English.Infrastructure.Services
             return _mapper.Map<User, UserDto>(user);
         }
 
-        public async Task<UserDto> GetUserByEmail(string email)
+        public async Task<UserDto> GetUserByName(string name)
         {
-            var user = await _userRepository.GetUserByEmail(email);
-            if (user is null)
-            {
-                throw new Exception("null");
-            }
-            return _mapper.Map<User, UserDto>(user);
-        }
-
-        public async Task<UserDto> GetUserById(Guid id)
-        {
-            var user = await _userRepository.GetUserById(id);
+            var user = await _userRepository.GetUserByName(name);
             if (user is null)
             {
                 throw new Exception("null");

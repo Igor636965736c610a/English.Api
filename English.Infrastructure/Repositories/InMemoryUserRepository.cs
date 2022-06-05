@@ -23,6 +23,8 @@ namespace English.Infrastructure.Repositories
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
         }
+        public async Task<User> GetUserByName(string name)
+            => await _context.Users.FirstOrDefaultAsync(x => x.Name == name);
 
         public async Task<User> GetUserByUsername(string username)
             => await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
@@ -32,8 +34,6 @@ namespace English.Infrastructure.Repositories
 
         public async Task<User> GetUserById(Guid id)
             => await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
-        public async Task<User> GetUserByPassword(string password)
-            => await _context.Users.FirstOrDefaultAsync(x => x.Password == password);
 
         public Task<IEnumerable<User>> GetAllUsers()
         {

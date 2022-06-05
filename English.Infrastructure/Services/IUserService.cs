@@ -11,9 +11,8 @@ namespace English.Infrastructure.Services
     public interface IUserService
     {
         Task CreateUser(string name, string username, string password, string email);
-        Task<UserDto> GetUser(string username);
-        Task<UserDto> GetUserByEmail(string email);
-        Task<UserDto> GetUserById(Guid id);
+        Task<UserDto> GetUserByUsername(string username);
+        Task<UserDto> GetUserByName(string name);
         Task<string> GenerateJwt(string email, string password);
     }
 }

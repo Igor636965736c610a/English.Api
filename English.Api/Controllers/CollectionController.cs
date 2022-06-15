@@ -23,41 +23,41 @@ namespace English.Api.Controllers
         public async Task Post([FromBody] CreateCollection CollectionRequest)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var UserId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            await _collectionServices.AddCollection(CollectionRequest.CollectionName, UserId);
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.AddCollection(CollectionRequest.CollectionName, userId);
         }
 
         [HttpPost("createWord")]
         public async Task Post([FromBody] CreateCollection collectionRequest, CreateWord wordRequest)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var UserId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             await _collectionServices.AddWord
-                (wordRequest.PolishWord, wordRequest.EnglishWord, collectionRequest.CollectionName, UserId);
+                (wordRequest.PolishWord, wordRequest.EnglishWord, collectionRequest.CollectionName, userId);
         }
 
         [HttpGet("collectionName")]
         public async Task<CollectionDto> GetCollection(string collectionName)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var UserId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            return await _collectionServices.GetCollection(collectionName, UserId);
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return await _collectionServices.GetCollection(collectionName, userId);
         }
 
         [HttpGet("collectionName/englishWord")]
         public async Task<WordDto> GetEnglishWord(string collectionName, string englishWord)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var UserId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            return await _collectionServices.GetWordEnglish(englishWord, collectionName, UserId);
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return await _collectionServices.GetWordEnglish(englishWord, collectionName, userId);
         }
 
         [HttpGet("collectionName/polishWord")]
         public async Task<WordDto> GetPolishWord(string collectionName, string polishWord)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var UserId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            return await _collectionServices.GetWordPolish(polishWord, collectionName, UserId);
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return await _collectionServices.GetWordPolish(polishWord, collectionName, userId);
         }
     }
 }

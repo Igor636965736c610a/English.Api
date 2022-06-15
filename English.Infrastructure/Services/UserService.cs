@@ -60,17 +60,60 @@ namespace English.Infrastructure.Services
             {
                 throw new Exception("null");
             }
+
             return _mapper.Map<User, UserDto>(user);
         }
 
-        public async Task<IEnumerable<UserDto>> GetUserByName(string name)
+        public async Task<UserDto> GetUserByEmail(string email)
         {
-            var users = await _userRepository.GetUserByName(name);
+            var user = await _userRepository.GetUserByEmail(email);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+
+            return _mapper.Map<User, UserDto>(user);
+        }
+
+        public async Task<IEnumerable<UserDto>> GetUsersByName(string name)
+        {
+            var users = await _userRepository.GetUsersByName(name);
             if (users is null)
             {
                 throw new Exception("null");
             }
+
             return _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
+        }
+
+        public Task UpdateUser(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateUser(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task RemoveUser(Guid id)
+        {
+            var user = await _userRepository.GetUserById(id);
+            if(user is null)
+            {
+                throw new Exception("null");
+            }
+            await _userRepository.RemoveUser(user);
+        }
+
+        public async Task RemoveUser(string email)
+        {
+            var user = await _userRepository.GetUserByEmail(email);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            await _userRepository.RemoveUser(user);
         }
 
         public async Task<string> GenerateJwt(string email, string password)
@@ -104,7 +147,19 @@ namespace English.Infrastructure.Services
                 signingCredentials: cred);
 
             var tokenHandler = new JwtSecurityTokenHandler();
+
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<UserDto> GetUserById(Guid id)
+        {
+            var user = await _userRepository.GetUserById(id);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+
+            return _mapper.Map<User, UserDto>(user);
         }
     }
 }

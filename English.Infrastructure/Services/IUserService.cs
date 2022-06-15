@@ -12,7 +12,13 @@ namespace English.Infrastructure.Services
     {
         Task CreateUser(string name, string username, string password, string email);
         Task<UserDto> GetUserByUsername(string username);
-        Task<IEnumerable<UserDto>> GetUserByName(string name);
+        Task<UserDto> GetUserByEmail(string email);
+        Task<UserDto> GetUserById(Guid id);
+        Task<IEnumerable<UserDto>> GetUsersByName(string name);
+        Task UpdateUser(Guid id);
+        Task UpdateUser(string email);
         Task<string> GenerateJwt(string email, string password);
+        Task RemoveUser(Guid id);
+        Task RemoveUser(string email);
     }
 }

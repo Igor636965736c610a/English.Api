@@ -1,5 +1,6 @@
 ﻿using English.Infrastructure.Commands.Login;
 using English.Infrastructure.Commands.User;
+using English.Infrastructure.DTO;
 using English.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,20 @@ namespace English.Api.Controllers
         [HttpPost("register")]
         public async Task Register([FromBody] RegisterUser request)
             => await _userService.CreateUser(request.Name, request.UserName, request.Password, request.Email);
-        
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login request)
         {
             var token = await _userService.GenerateJwt(request.Email, request.Password);
             return Ok(token);
         }
+
+        [HttpGet("getUser/username")]
+        public async Task<UserDto> GetUserByUsername(string userName)
+            => await _userService.GetUserByUsername(userName);
+
+        [HttpGet("getUser/name")]
+        public async Task<IEnumerable<UserDto>> GetUserByName(string name)
+            => await _userService.GetUserByName(name);
     }
 }

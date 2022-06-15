@@ -19,60 +19,71 @@ namespace English.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Collection> GetCollection(Guid id, Guid userId)
+        public async Task<Collection> GetCollection(Guid id, User user)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(y => y.Id == userId);
             return await _context.Collections.FirstOrDefaultAsync(x => x.Id == id && x.User == user);
         }
 
-        public async Task<Collection> GetCollection(string name, Guid userId)
+        public async Task<Collection> GetCollection(string name, User user)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(y => y.Id == userId);
             return await _context.Collections.FirstOrDefaultAsync(x => x.Name == name && x.User == user);
         }
 
-        public async Task<Word> GetWordById(Guid id, string collectionName, Guid userId)
+        public async Task<Word> GetWordById(Guid id, Collection collection)
         {
-            var collection = await GetCollection(collectionName, userId);
             return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.Id == id);
         }
 
-        public async Task<Word> GetWordEnglish(string englishWord, string collectionName, Guid userId)
+        public async Task<Word> GetWordEnglish(string englishWord, Collection collection)
         {
-            var collection = await GetCollection(collectionName, userId);
             return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.EnglishWord == englishWord);
         }
 
-        public async Task<Word> GetWordPolish(string polishWord, string collectionName, Guid userId)
+        public async Task<Word> GetWordPolish(string polishWord, Collection collection)
         {
-            var collection = await GetCollection(collectionName, userId);
             return await _context.Words.FirstOrDefaultAsync(x => x.Collection == collection && x.PolishWord == polishWord);
         }
 
-        public async Task AddCollection(Collection collection, Guid userId)
+        public async Task AddCollection(Collection collection)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             await _context.Collections.AddAsync(collection);
-            collection.User = user;
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddWord(Word word, string collectionName, Guid userId)
+        public async Task AddWord(Word word)
         {
-            var collection = await GetCollection(collectionName, userId);
             await _context.Words.AddAsync(word);
-            word.Collection = collection;
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Word>> GetAllWords(string collectioName, Guid userId)
+        public async Task<IEnumerable<Word>> GetAllWords(Collection collection)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(_context.Words.Where(x => x.Collection == collection));
         }
 
-        public async Task<IEnumerable<Collection>> GetAllCollection()
+        public async Task<IEnumerable<Collection>> GetAllCollections(User user)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(_context.Collections.Where(x => x.User == user));
+        }
+
+        public async Task UpdateWord(Word word)
+        {
+            await Task.FromResult(_context.Words.Update(word));
+        }
+
+        public async Task UpdateCollection(Collection collection)
+        {
+            await Task.FromResult(_context.Collections.Update(collection));
+        }
+
+        public async Task RemoveWord(Word word)
+        {
+            await Task.FromResult(_context.Words.Remove(word));
+        }
+
+        public async Task RemoveCollection(Collection collection)
+        {
+            await Task.FromResult(_context.Collections.Remove(collection));
         }
     }
 }

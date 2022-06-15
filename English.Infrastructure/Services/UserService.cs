@@ -63,14 +63,14 @@ namespace English.Infrastructure.Services
             return _mapper.Map<User, UserDto>(user);
         }
 
-        public async Task<UserDto> GetUserByName(string name)
+        public async Task<IEnumerable<UserDto>> GetUserByName(string name)
         {
-            var user = await _userRepository.GetUserByName(name);
-            if (user is null)
+            var users = await _userRepository.GetUserByName(name);
+            if (users is null)
             {
                 throw new Exception("null");
             }
-            return _mapper.Map<User, UserDto>(user);
+            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
         }
 
         public async Task<string> GenerateJwt(string email, string password)
@@ -90,6 +90,7 @@ namespace English.Infrastructure.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, $"{user.UserName}"),
+                new Claim(ClaimTypes.Email, user.Email),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));

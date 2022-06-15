@@ -23,8 +23,8 @@ namespace English.Infrastructure.Repositories
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
         }
-        public async Task<User> GetUserByName(string name)
-            => await _context.Users.FirstOrDefaultAsync(x => x.Name == name);
+        public async Task<IEnumerable<User>> GetUsersByName(string name)
+            => await Task.FromResult(_context.Users.Where(user => user.Name == name));
 
         public async Task<User> GetUserByUsername(string username)
             => await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
@@ -35,24 +35,15 @@ namespace English.Infrastructure.Repositories
         public async Task<User> GetUserById(Guid id)
             => await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
-        public Task<IEnumerable<User>> GetAllUsers()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<User>> GetAllUsers()
+            => await Task.FromResult(_context.Users);
+            
+        public async Task UpdateUser(User user)
+            => await Task.FromResult(_context.Users.Update(user));
 
-        public Task UpdateUser(User user)
+        public async Task RemoveUser(User user)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveUser(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveUser(string username)
-        {
-            throw new NotImplementedException();
+            await Task.FromResult(_context.Users.Remove(user));
         }
     }
 }

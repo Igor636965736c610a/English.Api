@@ -25,62 +25,56 @@ namespace English.Infrastructure.Services
         }
         public async Task AddCollection(string collectionName, Guid userId)
         {
-            var userValidation = await _userRepository.GetUserById(userId);
-            if (userValidation is null)
+            var user = await _userRepository.GetUserById(userId);
+            if(user is null)
             {
                 throw new InvalidOperationException();
             }
-            var nameValidation = await _collectionRepository.GetCollection(collectionName, userId);
+            var nameValidation = await _collectionRepository.GetCollection(collectionName, user);
             if (nameValidation is not null)
             {
                 throw new InvalidOperationException();
             }
             var id = Guid.NewGuid();
-            List<Word> listWord = new List<Word>();
-            var collection = new Collection(collectionName, listWord, id);
-            await _collectionRepository.AddCollection(collection, userId);
+            var collection = new Collection(collectionName, id, user);
+            await _collectionRepository.AddCollection(collection);
         }
 
         public async Task AddWord(string polishWord, string englishWord, string collectionName, Guid userId)
         {
-            var validationUserId = await _userRepository.GetUserById(userId);
-            if(validationUserId is null)
+            var user = await _userRepository.GetUserById(userId);
+            if(user is null)
             {
                 throw new Exception("xd");
             }
-            var validationCollectionName = await _collectionRepository.GetCollection(collectionName, userId);
-            if (validationCollectionName is null)
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
             {
                 throw new Exception("x");
             }
-            var validationPolsihWord = await _collectionRepository.GetWordPolish(polishWord, collectionName, userId);
-            if (validationPolsihWord is not null)
+            var _polishWord = await _collectionRepository.GetWordPolish(polishWord, collection);
+            if (_polishWord is not null)
             {
                 throw new Exception("y");
             }
-            var validationEnglishWord = await _collectionRepository.GetWordEnglish(englishWord, collectionName, userId);
-            if (validationEnglishWord is not null)
+            var _englishWord = await _collectionRepository.GetWordEnglish(englishWord, collection);
+            if (_englishWord is not null)
             {
                 throw new Exception("z");
             }
             Guid id = Guid.NewGuid();
-            var word = new Word(englishWord, polishWord, id);
-            await _collectionRepository.AddWord(word, collectionName, userId);
+            var word = new Word(englishWord, polishWord, id, collection);
+            await _collectionRepository.AddWord(word);
         }
 
-        public Task<CollectionDto> GetCollection(Guid id)
+        public async Task<CollectionDto> GetCollection(Guid id, Guid userId)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<CollectionDto> GetCollection(string name, Guid userId)
-        {
-            var validationUserId = await _userRepository.GetUserById(userId);
-            if(validationUserId is null)
-            { 
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
                 throw new Exception("null");
             }
-            var collection = await _collectionRepository.GetCollection(name, userId);
+            var collection = await _collectionRepository.GetCollection(id, user);
             if (collection is null)
             {
                 throw new Exception("null");
@@ -89,46 +83,215 @@ namespace English.Infrastructure.Services
             return _mapper.Map<Collection, CollectionDto>(collection);
         }
 
-        public Task<WordDto> GetWordEnglish(Guid id, string collectionName)
+        public async Task<CollectionDto> GetCollection(string name, Guid userId)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetUserById(userId);
+            if(user is null)
+            { 
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(name, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+
+            return _mapper.Map<Collection, CollectionDto>(collection);
+        }
+
+        public async Task<WordDto> GetWordById(Guid id, string collectionName, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordById(id, collection);
+            if (word is null)
+            {
+                throw new Exception("null");
+            }
+
+            return _mapper.Map<Word, WordDto>(word);
         }
 
         public async Task<WordDto> GetWordEnglish(string englishWord, string collectionName, Guid userId)
         {
-            var validationUserId = await _userRepository.GetUserById(userId);
-            if (validationUserId is null)
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
             {
                 throw new Exception("null");
             }
-            var word = await _collectionRepository.GetWordEnglish(englishWord, collectionName, userId);
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if(collection is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordEnglish(englishWord, collection);
             if (word is null)
             {
                 throw new Exception("null");
             }
 
             return _mapper.Map<Word, WordDto>(word);
-        }
-
-        public Task<WordDto> GetWordPolish(Guid id, string collectionName)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<WordDto> GetWordPolish(string polishWord, string collectionName, Guid userId)
         {
-            var validationUserId = await _userRepository.GetUserById(userId);
-            if (validationUserId is null)
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
             {
                 throw new Exception("null");
             }
-            var word = await _collectionRepository.GetWordEnglish(polishWord, collectionName, userId);
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if(collection is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordEnglish(polishWord, collection);
             if (word is null)
             {
                 throw new Exception("null");
             }
 
             return _mapper.Map<Word, WordDto>(word);
+        }
+
+        public async Task<IEnumerable<CollectionDto>> GetAllCollections(Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collections = await _collectionRepository.GetAllCollections(user);
+            if(collections is null)
+            {
+                throw new Exception("null");
+            }
+
+            return _mapper.Map<IEnumerable<Collection>, IEnumerable<CollectionDto>>(collections);
+        }
+
+        public async Task<IEnumerable<WordDto>> GetAllWords(string collectionName, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collections = await _collectionRepository.GetCollection(collectionName, user);
+            if (collections is null)
+            {
+                throw new Exception("null");
+            }
+            var words = await _collectionRepository.GetAllWords(collections);
+            if (words is null)
+            {
+                throw new Exception("null");
+            }    
+
+            return _mapper.Map<IEnumerable<Word>, IEnumerable<WordDto>>(words);
+        }
+
+        public async Task RemoveCollection(string collectionName, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+
+            await _collectionRepository.RemoveCollection(collection);
+        }
+
+        public async Task RemoveCollection(Guid id, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(id, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+
+            await _collectionRepository.RemoveCollection(collection);
+        }
+
+        public async Task RemoveWordByPolishWord(string polishWord, string collectionName, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordPolish(polishWord, collection);
+            if (word is null)
+            {
+                throw new Exception("null");
+            }
+
+            await _collectionRepository.RemoveWord(word);
+        }
+
+        public async Task RemoveWordByEnglishWord(string englishWord, string collectionName, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordEnglish(englishWord, collection);
+            if (word is null)
+            {
+                throw new Exception("null");
+            }
+
+            await _collectionRepository.RemoveWord(word);
+        }
+
+        public async Task RemoveWordById(Guid id, string collectionName, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordById(id, collection);
+            if (word is null)
+            {
+                throw new Exception("null");
+            }
+
+            await _collectionRepository.RemoveWord(word);
         }
     }
 }

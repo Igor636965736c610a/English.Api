@@ -20,16 +20,12 @@ namespace English.Core.Entities
         protected Word()
         {
         }
-        public Word(string englishWord, string polishWord)
-        {
-            EnglishWord = englishWord;
-            PolishWord = polishWord;
-        }
-        public Word(string englishWord, string polishWord, Guid id)
+        public Word(string englishWord, string polishWord, Guid id, Collection collection)
         {
             Id = id;
             EnglishWord = englishWord;
             PolishWord = polishWord;
+            Collection = collection;
         }
     }
 }

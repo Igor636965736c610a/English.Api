@@ -14,22 +14,11 @@ namespace English.Core.Domain
         protected Collection()
         {
         }
-        public Collection(string name, List<Word> word)
+        public Collection(string name, Guid id, User user)
         {
             Name = name;
-            Word = word;
-        }
-        public Collection(string name, List<Word> word, Guid id)
-        {
-            Name = name;
-            Word = word;
             Id = id;
-        }
-        public Collection(string name, List<Word> word, Guid id, User user)
-        {
-            Name = name;
-            Word = word;
-            Id = id;
+            User = user;
         }
     }
 }

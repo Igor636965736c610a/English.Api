@@ -293,5 +293,30 @@ namespace English.Infrastructure.Services
 
             await _collectionRepository.RemoveWord(word);
         }
+
+        public async Task ChangeSkillLevel(Guid id, string collectionName, Guid userId, int skillLevel)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+            var word = await _collectionRepository.GetWordById(id, collection);
+            if (word is null)
+            {
+                throw new Exception("null");
+            }
+            if(skillLevel > 2)
+            {
+                throw new Exception("Out of range skill level");
+            }
+
+            await _collectionRepository.ChangeSkillLevel(word, skillLevel);
+        }
     }
 }

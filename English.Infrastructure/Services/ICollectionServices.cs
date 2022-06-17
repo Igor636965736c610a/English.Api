@@ -24,5 +24,6 @@ namespace English.Infrastructure.Services
         Task RemoveWordByPolishWord(string polishWord, string collectionName, Guid userId);
         Task RemoveWordByEnglishWord(string englishWord, string collectionName, Guid userId);
         Task RemoveWordById(Guid id, string collectionName, Guid userId);
+        Task ChangeSkillLevel(Guid id, string collectionName, Guid userId, int skillLevel);
     }
 }

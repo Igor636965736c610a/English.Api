@@ -30,7 +30,7 @@ namespace English.Api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var email = identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
             await _userService.RemoveUser(email);
-        }            
+        }
 
         [HttpDelete("user")]
         public async Task RemoveById()

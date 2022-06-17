@@ -31,7 +31,7 @@ namespace English.Api.Controllers
             => await _userService.GetUserByUsername(userName);
 
         [HttpGet("user/name")]
-        public async Task<IEnumerable<UserDto>> GetUserByName(string name)
+        public async Task<IEnumerable<UserDto>> GetUsersByName(string name)
             => await _userService.GetUsersByName(name);
 
         [HttpGet("user/email")]

@@ -12,5 +12,6 @@ namespace English.Core.Dto
         public string EnglishWord { get; set; }
         public string PolishWord { get; set; }
         public Guid Id { get; set; }
+        public SkillLevel SkillLevel { get; set; }
     }
 }

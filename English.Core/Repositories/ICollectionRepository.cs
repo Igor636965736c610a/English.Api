@@ -23,5 +23,6 @@ namespace English.Core.Repositories
         Task UpdateCollection(Collection collection);
         Task RemoveWord(Word word);
         Task RemoveCollection(Collection collection);
+        Task ChangeSkillLevel(Word word, int skillLevel);
     }
 }

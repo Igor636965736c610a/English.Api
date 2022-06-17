@@ -12,6 +12,7 @@ namespace English.Core.Entities
         public string EnglishWord { get; set; }
         public string PolishWord { get; set; }
         public Guid Id { get; protected set; }
+        public SkillLevel SkillLevel { get; set; } = SkillLevel.bad;
 
         public Guid CollectionId { get; set; }
         public Collection Collection { get; set; }
@@ -27,5 +28,12 @@ namespace English.Core.Entities
             PolishWord = polishWord;
             Collection = collection;
         }
+    }
+
+    public enum SkillLevel 
+    {
+        bad = 0,
+        average = 1,
+        good = 2
     }
 }

@@ -1,4 +1,5 @@
 ﻿using English.Core.Dto;
+using English.Infrastructure.Commands.Word;
 using English.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
@@ -25,5 +26,6 @@ namespace English.Infrastructure.Services
         Task RemoveWordByEnglishWord(string englishWord, string collectionName, Guid userId);
         Task RemoveWordById(Guid id, string collectionName, Guid userId);
         Task ChangeSkillLevel(Guid id, string collectionName, Guid userId, int skillLevel);
+        Task ChangeManySkillLevel(List<ChangeManySkillLevel> skillLevels, string collectionName, Guid userId);
     }
 }

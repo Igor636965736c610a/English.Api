@@ -3,6 +3,7 @@ using English.Core.Domain;
 using English.Core.Dto;
 using English.Core.Entities;
 using English.Core.Repositories;
+using English.Infrastructure.Commands.Word;
 using English.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
@@ -317,6 +318,38 @@ namespace English.Infrastructure.Services
             }
 
             await _collectionRepository.ChangeSkillLevel(word, skillLevel);
+        }
+
+        public async Task ChangeManySkillLevel(List<ChangeManySkillLevel> skillLevels, string collectionName, Guid userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user is null)
+            {
+                throw new Exception("null");
+            }
+            var collection = await _collectionRepository.GetCollection(collectionName, user);
+            if (collection is null)
+            {
+                throw new Exception("null");
+            }
+            foreach (var skill in skillLevels)
+            {
+                if(skill.SkillLevel > 2)
+                {
+                    throw new Exception($"Word with id : {skill.Id} has out of range skill level");
+                }
+            }
+
+            List<Guid> wordsIDs = skillLevels.Select(skill => skill.Id).ToList();
+            var filtered = await _collectionRepository.ChangeManySkillLevel(wordsIDs, collection);
+            foreach (var word in filtered)
+            {
+                foreach (var skill in skillLevels)
+                {
+                    word.SkillLevel = (SkillLevel)skill.SkillLevel;
+                }
+            }
+            await _collectionRepository.UpdateWords(filtered);
         }
     }
 }

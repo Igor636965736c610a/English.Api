@@ -2,6 +2,7 @@
 using English.Core.Domain;
 using English.Core.Dto;
 using English.Core.Entities;
+using English.Infrastructure.Commands.Word;
 using English.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;

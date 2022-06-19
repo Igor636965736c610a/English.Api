@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using English.Infrastructure.Commands.Word;
 
 namespace English.Infrastructure.Repositories
 {
@@ -53,21 +54,43 @@ namespace English.Infrastructure.Repositories
             => await Task.FromResult(_context.Collections.Where(x => x.User == user));
 
         public async Task UpdateWord(Word word)
-            => await Task.FromResult(_context.Words.Update(word));
+        {
+            await Task.FromResult(_context.Words.Update(word));
+            await _context.SaveChangesAsync();
+        }
 
         public async Task UpdateCollection(Collection collection)
-            => await Task.FromResult(_context.Collections.Update(collection));
+        {
+            await Task.FromResult(_context.Collections.Update(collection));
+            await _context.SaveChangesAsync();
+        }
 
         public async Task RemoveWord(Word word)
-            => await Task.FromResult(_context.Words.Remove(word));
+        {
+            await Task.FromResult(_context.Words.Remove(word));
+            await _context.SaveChangesAsync();
+        }
 
         public async Task RemoveCollection(Collection collection)
-            => await Task.FromResult(_context.Collections.Remove(collection));
+        {
+            await Task.FromResult(_context.Collections.Remove(collection));
+            await _context.SaveChangesAsync();
+        }
 
         public async Task ChangeSkillLevel(Word word, int skillLevel)
         {
             word.SkillLevel = (SkillLevel)skillLevel;
             await Task.FromResult(_context.Words.Update(word));
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IQueryable<Word>> ChangeManySkillLevel(List<Guid> wordsIDs, Collection collection)
+            => await Task.FromResult(_context.Words.Where(word => wordsIDs.Contains(word.Id) || word.Collection == collection));
+
+        public async Task UpdateWords(IQueryable<Word> words)
+        {
+            _context.Words.UpdateRange(words);
+            await _context.SaveChangesAsync();
         }
     }
 }

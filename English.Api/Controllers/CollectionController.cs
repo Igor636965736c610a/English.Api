@@ -59,5 +59,13 @@ namespace English.Api.Controllers
             var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             return await _collectionServices.GetWordPolish(polishWord, collectionName, userId);
         }
+
+        [HttpPut()]
+        public async Task ChangeManySkillLevel(List<ChangeManySkillLevel> skillLevels, string collectionName)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.ChangeManySkillLevel(skillLevels, collectionName, userId);
+        }
     }
 }

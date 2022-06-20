@@ -347,6 +347,7 @@ namespace English.Infrastructure.Services
                 var skillLevel = skillLevels.First(x => x.Id == word.Id);
                 word.SkillLevel = (SkillLevel)skillLevel.SkillLevel;
             }
+
             await _collectionRepository.UpdateWords(filtered);
         }
     }

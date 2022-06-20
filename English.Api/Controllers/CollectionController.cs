@@ -99,5 +99,53 @@ namespace English.Api.Controllers
             var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             await _collectionServices.ChangeManySkillLevels(skillLevels, collectionName, userId);
         }
+
+        [HttpPatch()]
+        public async Task ChangeSkillLevel(Guid id, string collectionName, int skillLevel)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.ChangeSkillLevel(id, collectionName, userId, skillLevel);
+        }
+
+        [HttpDelete()]
+        public async Task RemoveCollection(string collectionName)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.RemoveCollection(collectionName, userId);
+        }
+
+        [HttpDelete()]
+        public async Task RemoveCollection(Guid id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.RemoveCollection(id, userId);
+        }
+
+        [HttpDelete()]
+        public async Task RemoveWordByPolishWord(string polishWord, string collectionName)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.RemoveWordByPolishWord(polishWord, collectionName, userId);
+        }
+
+        [HttpDelete()]
+        public async Task RemoveWordByEnglishWord(string englishWord, string collectionName)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.RemoveWordByEnglishWord(englishWord, collectionName, userId);
+        }
+
+        [HttpDelete()]
+        public async Task RemoveWordById(Guid id, string collectionName)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            await _collectionServices.RemoveWordById(id, collectionName, userId);
+        }
     }
 }

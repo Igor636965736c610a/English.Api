@@ -26,6 +26,6 @@ namespace English.Infrastructure.Services
         Task RemoveWordByEnglishWord(string englishWord, string collectionName, Guid userId);
         Task RemoveWordById(Guid id, string collectionName, Guid userId);
         Task ChangeSkillLevel(Guid id, string collectionName, Guid userId, int skillLevel);
-        Task ChangeManySkillLevel(List<ChangeManySkillLevel> skillLevels, string collectionName, Guid userId);
+        Task ChangeManySkillLevels(List<ChangeManySkillLevel> skillLevels, string collectionName, Guid userId);
     }
 }

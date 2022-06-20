@@ -320,7 +320,7 @@ namespace English.Infrastructure.Services
             await _collectionRepository.ChangeSkillLevel(word, skillLevel);
         }
 
-        public async Task ChangeManySkillLevel(List<ChangeManySkillLevel> skillLevels, string collectionName, Guid userId)
+        public async Task ChangeManySkillLevels(List<ChangeManySkillLevel> skillLevels, string collectionName, Guid userId)
         {
             var user = await _userRepository.GetUserById(userId);
             if (user is null)
@@ -341,13 +341,11 @@ namespace English.Infrastructure.Services
             }
 
             List<Guid> wordsIDs = skillLevels.Select(skill => skill.Id).ToList();
-            var filtered = await _collectionRepository.ChangeManySkillLevel(wordsIDs, collection);
+            var filtered = await _collectionRepository.ChangeManySkillLevels(wordsIDs, collection);
             foreach (var word in filtered)
             {
-                foreach (var skill in skillLevels)
-                {
-                    word.SkillLevel = (SkillLevel)skill.SkillLevel;
-                }
+                var skillLevel = skillLevels.First(x => x.Id == word.Id);
+                word.SkillLevel = (SkillLevel)skillLevel.SkillLevel;
             }
             await _collectionRepository.UpdateWords(filtered);
         }

@@ -44,6 +44,22 @@ namespace English.Api.Controllers
             return await _collectionServices.GetCollection(collectionName, userId);
         }
 
+        [HttpGet("collection/getCollection/Id")]
+        public async Task<CollectionDto> GetCollection(Guid id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return await _collectionServices.GetCollection(id, userId);
+        }
+
+        [HttpGet("collection/getCollections/Id")]
+        public async Task<IEnumerable<CollectionDto>> GetAllCollection(Guid id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return await _collectionServices.GetAllCollections(userId);
+        }
+
         [HttpGet("collectionName/englishWord")]
         public async Task<WordDto> GetEnglishWord(string collectionName, string englishWord)
         {
@@ -60,12 +76,28 @@ namespace English.Api.Controllers
             return await _collectionServices.GetWordPolish(polishWord, collectionName, userId);
         }
 
-        [HttpPut()]
+        [HttpGet("collectionName/id")]
+        public async Task<WordDto> GetWordById(string collectionName, Guid id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return await _collectionServices.GetWordById(id, collectionName, userId);
+        }
+
+        [HttpGet("collectionName/getAllWords")]
+        public async Task<IEnumerable<WordDto>> GetAllWords(string collectionName)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            return await _collectionServices.GetAllWords(collectionName, userId);
+        }
+
+        [HttpPatch("collectionName/ChangeSkillLevels")]
         public async Task ChangeManySkillLevel(List<ChangeManySkillLevel> skillLevels, string collectionName)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var userId = new Guid(identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            await _collectionServices.ChangeManySkillLevel(skillLevels, collectionName, userId);
+            await _collectionServices.ChangeManySkillLevels(skillLevels, collectionName, userId);
         }
     }
 }

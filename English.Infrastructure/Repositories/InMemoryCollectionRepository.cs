@@ -84,11 +84,11 @@ namespace English.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<Word>> ChangeManySkillLevel(List<Guid> wordsIDs, Collection collection)
+        public async Task<IQueryable<Word>> ChangeManySkillLevels(List<Guid> wordsIDs, Collection collection)
             => await Task.FromResult(_context.Words.Where(word => wordsIDs.Contains(word.Id) || word.Collection == collection));
 
         public async Task UpdateWords(IQueryable<Word> words)
-        {
+        {   
             _context.Words.UpdateRange(words);
             await _context.SaveChangesAsync();
         }

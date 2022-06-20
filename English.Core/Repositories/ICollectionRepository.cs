@@ -24,7 +24,7 @@ namespace English.Core.Repositories
         Task RemoveWord(Word word);
         Task RemoveCollection(Collection collection);
         Task ChangeSkillLevel(Word word, int skillLevel);
-        Task<IQueryable<Word>> ChangeManySkillLevel(List<Guid> skillLevels, Collection collection);
+        Task<IQueryable<Word>> ChangeManySkillLevels(List<Guid> skillLevels, Collection collection);
         Task UpdateWords(IQueryable<Word> words);
     }
 }
